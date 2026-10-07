@@ -1,0 +1,253 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  background-color: #f3efe5;
+  color: #3f4935;
+  min-height: 100vh;
+}
+
+.agenda {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 50px 24px;
+  min-height: 100vh;
+}
+
+
+/* CABEÇALHO */
+
+.cabecalho {
+  margin-bottom: 35px;
+}
+
+.pequeno {
+  margin: 0 0 8px;
+  color: #8a806d;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  letter-spacing: 3px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 42px;
+  font-weight: normal;
+  letter-spacing: -1px;
+  color: #596747;
+}
+
+.subtitulo {
+  margin-top: 8px;
+  color: #827b6c;
+  font-size: 17px;
+}
+
+
+/* PESSOAS */
+
+.pessoas {
+  display: flex;
+  gap: 22px;
+  margin-bottom: 45px;
+}
+
+.pessoa {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  color: #6d685b;
+  font-size: 13px;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: #697653;
+  color: #f8f5ec;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Arial, sans-serif;
+  font-size: 17px;
+}
+
+
+/* DIA */
+
+.agenda-dia {
+  margin-bottom: 35px;
+}
+
+.titulo-dia {
+  border-bottom: 1px solid #d7d1c1;
+  padding-bottom: 15px;
+  margin-bottom: 10px;
+}
+
+.dia-semana {
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: #8a806d;
+}
+
+.titulo-dia h2 {
+  margin: 5px 0 0;
+  font-size: 26px;
+  font-weight: normal;
+  color: #596747;
+}
+
+
+/* EVENTOS */
+
+.evento {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  padding: 18px 10px;
+  border-bottom: 1px solid #ded8c8;
+}
+
+.horario {
+  width: 55px;
+  color: #8a806d;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.detalhes-evento h3 {
+  margin: 0 0 5px;
+  font-size: 19px;
+  font-weight: normal;
+  color: #4d5941;
+}
+
+.detalhes-evento p {
+  margin: 0;
+  color: #8a806d;
+  font-size: 14px;
+}
+
+
+/* BOTÃO */
+
+.botao-adicionar {
+  border: none;
+  background-color: #697653;
+  color: #f8f5ec;
+  padding: 14px 22px;
+  border-radius: 10px;
+  font-family: Arial, sans-serif;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.botao-adicionar:hover {
+  background-color: #53613f;
+}
+
+
+/* FORMULÁRIO */
+
+.formulario {
+  margin-top: 25px;
+  padding: 28px;
+  background-color: #fbf9f2;
+  border: 1px solid #ded8c8;
+  border-radius: 18px;
+  box-shadow: 0 8px 25px rgba(67, 70, 50, 0.08);
+}
+
+.formulario h2 {
+  margin-top: 0;
+  margin-bottom: 25px;
+  font-size: 25px;
+  font-weight: normal;
+  color: #596747;
+}
+
+.formulario label {
+  display: block;
+  margin-bottom: 18px;
+  color: #625f53;
+  font-size: 15px;
+}
+
+.formulario input,
+.formulario select,
+.formulario textarea {
+  display: block;
+  width: 100%;
+  margin-top: 7px;
+  padding: 12px 13px;
+  border: 1px solid #d7d1c1;
+  border-radius: 9px;
+  background-color: #f7f4eb;
+  color: #3f4935;
+  font-family: inherit;
+  font-size: 16px;
+  outline: none;
+}
+
+.formulario input:focus,
+.formulario select:focus,
+.formulario textarea:focus {
+  border-color: #697653;
+}
+
+
+/* ESCONDER */
+
+.escondido {
+  display: none;
+}
+
+/* TELA INICIAL */
+
+.tela-inicial {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 30px;
+}
+
+.tela-inicial h1 {
+  margin: 0;
+  font-size: 48px;
+  font-weight: normal;
+  color: #596747;
+}
+
+.tela-inicial .frase {
+  margin: 15px 0 30px;
+  color: #827b6c;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.botao-abrir {
+  border: none;
+  background-color: #697653;
+  color: #f8f5ec;
+  padding: 15px 28px;
+  border-radius: 12px;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.botao-abrir:hover {
+  background-color: #53613f;
+}

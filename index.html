@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="/src/style.css">
+
+  <title>Agenda da Família</title>
+</head>
+
+<body>
+
+  <section class="tela-inicial" id="telaInicial">
+
+    <p class="pequeno">NOSSA CASA</p>
+  
+    <h1>Agenda da Família</h1>
+  
+    <p class="frase">
+      Tudo da nossa família,<br>
+      em um só lugar.
+    </p>
+  
+    <button id="abrirAgenda" class="botao-abrir">
+      Abrir agenda
+    </button>
+  
+  </section>
+
+  <main class="agenda escondido">
+
+    <header class="cabecalho">
+      <p class="pequeno">NOSSA CASA</p>
+
+      <h1>Agenda da Família</h1>
+
+      <p class="subtitulo">Outubro · 2026</p>
+    </header>
+
+
+    <section class="pessoas">
+
+      <div class="pessoa">
+        <div class="avatar">T</div>
+        <span>Todos</span>
+      </div>
+    
+      <div class="pessoa">
+        <div class="avatar">D</div>
+        <span>Diogo</span>
+      </div>
+    
+      <div class="pessoa">
+        <div class="avatar">I</div>
+        <span>Iara</span>
+      </div>
+    
+      <div class="pessoa">
+        <div class="avatar">D</div>
+        <span>Davi</span>
+      </div>
+    
+      <div class="pessoa">
+        <div class="avatar">S</div>
+        <span>Sofia</span>
+      </div>
+
+      <div class="pessoa">
+        <div class="avatar">S</div>
+        <span>Sara</span>
+      </div>
+    
+      <div class="pessoa">
+        <div class="avatar">B</div>
+        <span>Benjamim</span>
+      </div>
+    
+    </section>
+
+
+    <section class="agenda-dia" id="agendaDia">
+
+      <div class="titulo-dia">
+        <div>
+          <span class="dia-semana">SEGUNDA-FEIRA</span>
+          <h2>05 de outubro</h2>
+        </div>
+      </div>
+
+
+      <div class="evento">
+
+        <div class="horario">
+          09:00
+        </div>
+
+        <div class="detalhes-evento">
+          <h3>Faculdade</h3>
+          <p>Sara · UCB</p>
+        </div>
+
+      </div>
+
+
+      <div class="evento">
+
+        <div class="horario">
+          18:00
+        </div>
+
+        <div class="detalhes-evento">
+          <h3>Catequese</h3>
+          <p>Davi · Igreja</p>
+        </div>
+
+      </div>
+
+
+      <div class="evento">
+
+        <div class="horario">
+          20:00
+        </div>
+
+        <div class="detalhes-evento">
+          <h3>Jantar em família</h3>
+          <p>Todos · Casa da Vó</p>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <button id="botaoAdicionar" class="botao-adicionar">
+      + Adicionar evento
+    </button>
+
+
+    <div id="formulario" class="formulario escondido">
+
+      <h2>Novo evento</h2>
+
+      <label>
+        Nome do evento
+        <input id="nomeEvento" type="text" placeholder="Ex: Dentista">
+      </label>
+
+      <label>
+        Quem vai?
+        <select id="pessoaEvento">
+          <option value="Diogo">Diogo</option>
+          <option value="Iara">Iara</option>
+          <option value="Davi">Davi</option>
+          <option value="Sofia">Sofia</option>
+          <option value="Sara">Sara</option>
+          <option value="Benjamim">Benjamim</option>
+          <option value="Todos">Todos</option>
+        </select>
+      </label>
+
+      <label>
+        Data
+        <input id="dataEvento" type="date">
+      </label>
+
+      <label>
+        Horário
+        <input id="horaEvento" type="time">
+      </label>
+
+      <label>
+        Local
+        <input id="localEvento" type="text" placeholder="Ex: Clínica X">
+      </label>
+
+      <label>
+        Transporte
+      
+        <select id="transporteEvento">
+          <option value="carro">🚗 Precisa de carro</option>
+          <option value="carona">🚙 Vai de carona</option>
+          <option value="casa">🏠 Em casa</option>
+          <option value="a-pe">🚶 Vai a pé</option>
+          <option value="publico">🚌 Transporte público</option>
+          <option value="indefinido">❓ Ainda não definido</option>
+        </select>
+      </label>
+
+      <label>
+      Observação
+    
+      <textarea
+        id="observacaoEvento"
+        placeholder="Ex: Levar documento"
+        rows="3"
+      ></textarea>
+    </label>
+
+      <button id="salvarEvento">
+        Adicionar evento
+      </button>
+
+    </div>
+
+  </main>
+
+  <script type="module" src="/src/main.js"></script>
+
+</body>
+</html>
