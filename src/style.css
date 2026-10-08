@@ -489,6 +489,7 @@ h1 {
 .grade-calendario > div {
   background: #fffdf8;
   min-height: 105px;
+  box-sizing: border-box;
 }
 
 .grade-calendario button.dia-calendario {
@@ -759,14 +760,31 @@ h1 {
     overflow-x: auto;
   }
 
+  .grade-calendario > div {
+    min-height: 55px;
+  }
+
+  .numero-dia {
+    width: 19px;
+    height: 19px;
+    line-height: 19px;
+    font-size: 11px;
+  }
+  
+  .evento-mini {
+    padding: 2px 3px;
+    font-size: 8px;
+  }
+
   .calendario-cabecalho {
-    min-width: 650px;
+    min-width: 560pxpx;
   }
 
   .dias-semana,
   .grade-calendario {
-    min-width: 650px;
-  }
+  min-width: 0;
+  width: 100%;
+}
 
   .agenda {
     padding-left: 12px;
@@ -779,9 +797,9 @@ h1 {
     margin-top: 10px;
   }
 
-  .cabecalho .pequeno {
-    font-size: 9px;
-    margin-bottom: 4px;
+  .calendario-cabecalho {
+    min-width: 0;
+    width: 100%;
   }
 
   .cabecalho h1 {
@@ -792,6 +810,12 @@ h1 {
   .cabecalho .subtitulo {
     font-size: 12px;
     margin-top: 5px;
+  }
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
   }
 }
 
@@ -805,4 +829,44 @@ h1 {
     font-size: 12px;
     border-radius: 8px;
   }
+
+  .grade-calendario button.dia-calendario {
+    min-height: 55px;
+    padding: 3px;
+}
+  
+  .numero-dia {
+    width: 19px;
+    height: 19px;
+    line-height: 19px;
+    font-size: 11px;
+}
+  
+  .evento-mini {
+    padding: 3px 4px;
+    font-size: 9px;
+  }
+}
+
+/* ABA NOSSA FAMÍLIA */
+
+.tela-familia {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100vh;
+  background: #fffdf8;
+  border-right: 1px solid #e3ddcf;
+  box-shadow: 5px 0 20px rgba(80, 75, 60, 0.08);
+  z-index: 90;
+  padding: 35px 25px;
+  box-sizing: border-box;
+
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.tela-familia:not(.escondido) {
+  transform: translateX(0);
 }

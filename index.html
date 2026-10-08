@@ -23,7 +23,7 @@
     </p>
   
     <button id="abrirAgenda" class="botao-abrir">
-      Abrir agenda
+      Entrar →
     </button>
   
   </section>
@@ -40,46 +40,9 @@
       <p class="subtitulo">Outubro · 2026</p>
     </header>
 
-
-    <section class="pessoas">
-
-      <div class="pessoa">
-        <div class="avatar">T</div>
-        <span>Todos</span>
-      </div>
-    
-      <div class="pessoa">
-        <div class="avatar">D</div>
-        <span>Diogo</span>
-      </div>
-    
-      <div class="pessoa">
-        <div class="avatar">I</div>
-        <span>Iara</span>
-      </div>
-    
-      <div class="pessoa">
-        <div class="avatar">D</div>
-        <span>Davi</span>
-      </div>
-    
-      <div class="pessoa">
-        <div class="avatar">S</div>
-        <span>Sofia</span>
-      </div>
-
-      <div class="pessoa">
-        <div class="avatar">S</div>
-        <span>Sara</span>
-      </div>
-    
-      <div class="pessoa">
-        <div class="avatar">B</div>
-        <span>Benjamim</span>
-      </div>
-    
-    </section>
-
+    <button id="abrirFamilia" class="botao-familia">
+      ...
+    </button>
 
     <section class="calendario" id="calendario">
 
@@ -104,13 +67,13 @@
       </div>
     
       <div class="dias-semana">
-        <span>DOM</span>
-        <span>SEG</span>
-        <span>TER</span>
-        <span>QUA</span>
-        <span>QUI</span>
-        <span>SEX</span>
-        <span>SÁB</span>
+         <span>DOM</span>
+         <span>SEG</span>
+         <span>TER</span>
+         <span>QUA</span>
+         <span>QUI</span>
+         <span>SEX</span>
+         <span>SÁB</span>
       </div>
     
       <div class="grade-calendario" id="gradeCalendario"></div>
@@ -118,9 +81,29 @@
     </section>
 
 
-    <button id="botaoAdicionar" class="botao-adicionar">
-      + Adicionar evento
+    <button id="botaoAdicionar" class="botao-adicionar" aria-label="Adicionar">
+      +
     </button>
+
+      <div id="menuAdicionar" class="menu-adicionar escondido">
+
+         <button data-acao="evento">
+           📅 Evento
+         </button>
+    
+         <button data-acao="compra">
+           🛒 Compra
+         </button>
+    
+         <button data-acao="cardapio">
+           🍽️ Cardápio
+         </button>
+    
+         <button data-acao="pessoa">
+           👤 Pessoa
+         </button>
+    
+      </div>
 
 
     <div id="formulario" class="formulario escondido">
@@ -135,13 +118,13 @@
       <label>
         Quem vai?
         <select id="pessoaEvento">
-          <option value="Diogo">Diogo</option>
-          <option value="Iara">Iara</option>
-          <option value="Davi">Davi</option>
-          <option value="Sofia">Sofia</option>
-          <option value="Sara">Sara</option>
-          <option value="Benjamim">Benjamim</option>
-          <option value="Todos">Todos</option>
+           <option value="Diogo">Diogo</option>
+           <option value="Iara">Iara</option>
+           <option value="Davi">Davi</option>
+           <option value="Sofia">Sofia</option>
+           <option value="Sara">Sara</option>
+           <option value="Benjamim">Benjamim</option>
+           <option value="Todos">Todos</option>
         </select>
       </label>
 
@@ -164,12 +147,12 @@
         Transporte
       
         <select id="transporteEvento">
-          <option value="carro">🚗 Precisa de carro</option>
-          <option value="carona">🚙 Vai de carona</option>
-          <option value="casa">🏠 Em casa</option>
-          <option value="a-pe">🚶 Vai a pé</option>
-          <option value="publico">🚌 Transporte público</option>
-          <option value="indefinido">❓ Ainda não definido</option>
+           <option value="carro">🚗 Precisa de carro</option>
+           <option value="carona">🚙 Vai de carona</option>
+           <option value="casa">🏠 Em casa</option>
+           <option value="a-pe">🚶 Vai a pé</option>
+           <option value="publico">🚌 Transporte público</option>
+           <option value="indefinido">❓ Ainda não definido</option>
         </select>
       </label>
 
@@ -187,9 +170,49 @@
         Adicionar evento
       </button>
 
+  </main>
+
+  <section id="telaFamilia" class="tela-familia escondido">
+
+    <button id="voltarAgenda" class="botao-voltar-agenda">
+      ← Voltar para agenda
+    </button>
+  
+    <h2>Nossa Família</h2>
+  
+    <div class="opcoes-familia">
+  
+      <button id="abrirPessoas" class="opcao-familia">
+         <span>👨‍👩‍👧‍👦</span>
+         <strong>Pessoas</strong>
+      </button>
+  
+      <button class="opcao-familia">
+         <span>🛒</span>
+         <strong>Lista de compras</strong>
+      </button>
+  
+      <button class="opcao-familia">
+         <span>🍽️</span>
+         <strong>Cardápio</strong>
+      </button>
+  
     </div>
 
-  </main>
+    <div id="areaPessoas" class="area-pessoas escondido">
+
+      <h3>Pessoas da família</h3>
+    
+      <button id="adicionarPessoa" class="botao-adicionar-pessoa">
+        + Adicionar pessoa
+      </button>
+    
+      <div id="listaPessoas" class="lista-pessoas">
+      </div>
+    
+    </div>
+  
+  </section>
 
   <script type="module" src="/src/main.js"></script>
 

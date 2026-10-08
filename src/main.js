@@ -402,6 +402,18 @@ voltarInicio.addEventListener("click", function() {
   telaInicial.classList.remove("escondido");
 });
 
+const abrirFamilia = document.querySelector("#abrirFamilia");
+const telaFamilia = document.querySelector("#telaFamilia");
+const voltarAgenda = document.querySelector("#voltarAgenda");
+
+abrirFamilia.addEventListener("click", function() {
+  telaFamilia.classList.remove("escondido");
+});
+
+voltarAgenda.addEventListener("click", function() {
+  telaFamilia.classList.add("escondido");
+});
+
 const tipoVisualizacao = document.querySelector("#tipoVisualizacao");
 const menuVisualizacao = document.querySelector("#menuVisualizacao");
 
