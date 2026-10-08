@@ -256,7 +256,7 @@ async function carregarEventos() {
   
       <div class="detalhes-evento">
         <h3>${evento.nome}</h3>
-        <p>${evento.pessoa} · ${evento.local}</p>
+        <p>${evento.pessoa} · ${evento.local} · ${evento.transporte}</p>
         ${evento.observacao ? `<p>Obs.: ${evento.observacao}</p>` : ""}
       </div>
     `;
