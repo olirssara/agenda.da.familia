@@ -30,6 +30,8 @@
 
   <main class="agenda escondido">
 
+    <button id="voltarInicio" class="botao-voltar">← Voltar</button>
+
     <header class="cabecalho">
       <p class="pequeno">NOSSA CASA</p>
 
@@ -79,57 +81,40 @@
     </section>
 
 
-    <section class="agenda-dia" id="agendaDia">
+    <section class="calendario" id="calendario">
 
-      <div class="titulo-dia">
-        <div>
-          <span class="dia-semana">SEGUNDA-FEIRA</span>
-          <h2>05 de outubro</h2>
+      <div class="calendario-cabecalho">
+        <button id="mesAnterior">‹</button>
+    
+        <div class="controle-visualizacao">
+          <button id="mesAtual">Outubro 2026</button>
+        
+          <button id="tipoVisualizacao">
+            Mês ▾
+          </button>
+          <div id="menuVisualizacao" class="menu-visualizacao escondido">
+            <button data-view="dia">Dia</button>
+            <button data-view="semana">Semana</button>
+            <button data-view="mes">Mês</button>
+            <button data-view="ano">Ano</button>
+          </div>
         </div>
+    
+        <button id="mesProximo">›</button>
       </div>
-
-
-      <div class="evento">
-
-        <div class="horario">
-          09:00
-        </div>
-
-        <div class="detalhes-evento">
-          <h3>Faculdade</h3>
-          <p>Sara · UCB</p>
-        </div>
-
+    
+      <div class="dias-semana">
+        <span>DOM</span>
+        <span>SEG</span>
+        <span>TER</span>
+        <span>QUA</span>
+        <span>QUI</span>
+        <span>SEX</span>
+        <span>SÁB</span>
       </div>
-
-
-      <div class="evento">
-
-        <div class="horario">
-          18:00
-        </div>
-
-        <div class="detalhes-evento">
-          <h3>Catequese</h3>
-          <p>Davi · Igreja</p>
-        </div>
-
-      </div>
-
-
-      <div class="evento">
-
-        <div class="horario">
-          20:00
-        </div>
-
-        <div class="detalhes-evento">
-          <h3>Jantar em família</h3>
-          <p>Todos · Casa da Vó</p>
-        </div>
-
-      </div>
-
+    
+      <div class="grade-calendario" id="gradeCalendario"></div>
+    
     </section>
 
 

@@ -55,6 +55,8 @@ if (error) {
   return;
 }
 
+await carregarEventos();
+
   if (nome === "" || data === "" || hora === "" || local === "") {
     alert("Preencha todos os campos.");
     return;
@@ -191,6 +193,14 @@ pessoas.forEach(function(pessoaElemento) {
 
 });
 
+let eventosCarregados = [];
+let visualizacaoAtual = "mes";
+
+let mesExibido = new Date();
+mesExibido.setDate(1);
+
+let dataSelecionada = null;
+
 async function carregarEventos() {
   const { data: eventos, error } = await supabase
     .from("eventos")
@@ -203,67 +213,176 @@ async function carregarEventos() {
     return;
   }
 
-  console.log("Eventos carregados:", eventos);
+  eventosCarregados = eventos;
 
-  eventos.forEach(function(evento) {
-    const dataEscolhida = new Date(evento.data + "T00:00:00");
-  
-    const dia = String(dataEscolhida.getDate()).padStart(2, "0");
-  
-    const meses = [
-      "janeiro", "fevereiro", "março", "abril", "maio", "junho",
-      "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"
-    ];
-  
-    const mes = meses[dataEscolhida.getMonth()];
-  
-    let diaAgenda = document.querySelector(
-      `.agenda-dia[data-data="${evento.data}"]`
+  mostrarCalendario();
+}
+
+function mostrarCalendario() {
+
+  if (visualizacaoAtual === "dia") {
+    mostrarVisualizacaoDia();
+    return;
+  }
+
+  const grade = document.querySelector("#gradeCalendario");
+  const titulo = document.querySelector("#mesAtual");
+
+  grade.innerHTML = "";
+
+  const ano = mesExibido.getFullYear();
+  const mes = mesExibido.getMonth();
+
+  const nomesMeses = [
+    "Janeiro",
+    "Fevereiro",
+    "Março",
+    "Abril",
+    "Maio",
+    "Junho",
+    "Julho",
+    "Agosto",
+    "Setembro",
+    "Outubro",
+    "Novembro",
+    "Dezembro"
+  ];
+
+  titulo.textContent = `${nomesMeses[mes]} ${ano}`;
+
+  const primeiroDia = new Date(ano, mes, 1);
+  const ultimoDia = new Date(ano, mes + 1, 0);
+
+  const primeiroDiaSemana = primeiroDia.getDay();
+
+  for (let i = 0; i < primeiroDiaSemana; i++) {
+    const vazio = document.createElement("div");
+    grade.appendChild(vazio);
+  }
+
+  for (let dia = 1; dia <= ultimoDia.getDate(); dia++) {
+
+    const data = `${ano}-${String(mes + 1).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
+
+    const eventosDoDia = eventosCarregados.filter(
+      evento => evento.data === data
     );
-  
-    if (!diaAgenda) {
-      diaAgenda = document.createElement("section");
-      diaAgenda.classList.add("agenda-dia");
-      diaAgenda.setAttribute("data-data", evento.data);
-  
-      diaAgenda.innerHTML = `
-        <div class="titulo-dia">
-          <div>
-            <span class="dia-semana">
-              ${dataEscolhida.toLocaleDateString("pt-BR", {
-                weekday: "long"
-              }).toUpperCase()}
-            </span>
-            <h2>${dia} de ${mes}</h2>
+
+    const quadrado = document.createElement("button");
+
+    quadrado.classList.add("dia-calendario");
+
+    quadrado.innerHTML = `
+      <span class="numero-dia">${dia}</span>
+
+      <div class="eventos-calendario">
+        ${eventosDoDia.map(evento => `
+          <div class="evento-mini">
+            ${evento.hora.slice(0, 5)} · ${evento.nome}
           </div>
-        </div>
-      `;
-  
-      document.querySelector(".agenda").insertBefore(
-        diaAgenda,
-        document.querySelector("#botaoAdicionar")
-      );
-    }
-  
-    const novoEvento = document.createElement("div");
-    novoEvento.classList.add("evento");
-    novoEvento.setAttribute("data-pessoa", evento.pessoa);
-  
-    novoEvento.innerHTML = `
-      <div class="horario">
-        ${evento.hora.slice(0, 5)}
-      </div>
-  
-      <div class="detalhes-evento">
-        <h3>${evento.nome}</h3>
-        <p>${evento.pessoa} · ${evento.local} · ${evento.transporte}</p>
-        ${evento.observacao ? `<p>Obs.: ${evento.observacao}</p>` : ""}
+        `).join("")}
       </div>
     `;
-  
-    diaAgenda.appendChild(novoEvento);
-  });
+
+    quadrado.addEventListener("click", function() {
+      mostrarEventosDoDia(data);
+    });
+
+    grade.appendChild(quadrado);
+  }
 }
+
+function mostrarEventosDoDia(data) {
+
+  dataSelecionada = data;
+
+  const eventosDoDia = eventosCarregados
+    .filter(evento => evento.data === data)
+    .sort((a, b) => a.hora.localeCompare(b.hora));
+
+  let area = document.querySelector("#eventosDoDia");
+
+  if (!area) {
+    area = document.createElement("section");
+    area.id = "eventosDoDia";
+    area.classList.add("eventos-do-dia");
+
+    document.querySelector("#botaoAdicionar")
+      .insertAdjacentElement("afterend", area);
+  }
+
+  const dataEscolhida = new Date(data + "T00:00:00");
+
+  const dataFormatada = dataEscolhida.toLocaleDateString("pt-BR", {
+    weekday: "long",
+    day: "numeric",
+    month: "long"
+  });
+
+  area.innerHTML = `
+    <h2>${dataFormatada}</h2>
+
+    ${
+      eventosDoDia.length === 0
+        ? `<p>Nenhum evento neste dia.</p>`
+        : eventosDoDia.map(evento => `
+          <div class="evento">
+            <div class="horario">
+              ${evento.hora.slice(0, 5)}
+            </div>
+
+            <div class="detalhes-evento">
+              <h3>${evento.nome}</h3>
+              <p>
+                ${evento.pessoa} · ${evento.local} · ${evento.transporte}
+              </p>
+
+              ${
+                evento.observacao
+                  ? `<p>Obs.: ${evento.observacao}</p>`
+                  : ""
+              }
+            </div>
+          </div>
+        `).join("")
+    }
+  `;
+}
+
+document.querySelector("#mesAnterior").addEventListener("click", function() {
+  if (visualizacaoAtual === "dia") {
+    const data = new Date(
+      (dataSelecionada || new Date().toISOString().slice(0, 10)) + "T00:00:00"
+    );
+    data.setDate(data.getDate() - 1);
+
+    dataSelecionada = `${data.getFullYear()}-${String(data.getMonth() + 1).padStart(2, "0")}-${String(data.getDate()).padStart(2, "0")}`;
+
+    mesExibido = new Date(data.getFullYear(), data.getMonth(), 1);
+  } else {
+    mesExibido.setMonth(mesExibido.getMonth() - 1);
+  }
+
+  mostrarCalendario();
+});
+
+document.querySelector("#mesProximo").addEventListener("click", function() {
+  if (visualizacaoAtual === "dia") {
+    const data = new Date(
+      (dataSelecionada || new Date().toISOString().slice(0, 10)) + "T00:00:00"
+    );
+    data.setDate(data.getDate() + 1);
+
+    dataSelecionada = `${data.getFullYear()}-${String(data.getMonth() + 1).padStart(2, "0")}-${String(data.getDate()).padStart(2, "0")}`;
+
+    mesExibido = new Date(data.getFullYear(), data.getMonth(), 1);
+  } else {
+    mesExibido.setMonth(mesExibido.getMonth() + 1);
+  }
+
+  mostrarCalendario();
+});
+
 
 carregarEventos();
 
@@ -275,3 +394,113 @@ abrirAgenda.addEventListener("click", function() {
   telaInicial.classList.add("escondido");
   agenda.classList.remove("escondido");
 });
+
+const voltarInicio = document.querySelector("#voltarInicio");
+
+voltarInicio.addEventListener("click", function() {
+  agenda.classList.add("escondido");
+  telaInicial.classList.remove("escondido");
+});
+
+const tipoVisualizacao = document.querySelector("#tipoVisualizacao");
+const menuVisualizacao = document.querySelector("#menuVisualizacao");
+
+tipoVisualizacao.addEventListener("click", function() {
+  menuVisualizacao.classList.toggle("escondido");
+});
+
+const opcoesVisualizacao = document.querySelectorAll(
+  "#menuVisualizacao button"
+);
+
+opcoesVisualizacao.forEach(function(opcao) {
+  opcao.addEventListener("click", function() {
+    const visualizacao = opcao.dataset.view;
+    visualizacaoAtual = visualizacao;
+    mostrarCalendario();
+
+    if (visualizacao === "dia") {
+      tipoVisualizacao.textContent = "Dia ▾";
+    }
+
+    if (visualizacao === "semana") {
+      tipoVisualizacao.textContent = "Semana ▾";
+    }
+
+    if (visualizacao === "mes") {
+      tipoVisualizacao.textContent = "Mês ▾";
+      document.querySelector(".dias-semana").style.display = "grid";
+      document.querySelector("#gradeCalendario").style.display = "grid";
+      mostrarCalendario();
+    }
+
+    if (visualizacao === "ano") {
+      tipoVisualizacao.textContent = "Ano ▾";
+    }
+
+    menuVisualizacao.classList.add("escondido");
+  });
+});
+
+function mostrarVisualizacaoDia() {
+  const grade = document.querySelector("#gradeCalendario");
+  const diasSemana = document.querySelector(".dias-semana");
+
+  grade.innerHTML = "";
+  diasSemana.style.display = "none";
+
+  const hoje = new Date();
+
+const data = dataSelecionada ||
+  `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, "0")}-${String(hoje.getDate()).padStart(2, "0")}`;
+
+  const eventosDoDia = eventosCarregados
+    .filter(evento => evento.data === data)
+    .sort((a, b) => a.hora.localeCompare(b.hora));
+
+  const dataEscolhida = new Date(data + "T00:00:00");
+
+  const titulo = document.querySelector("#mesAtual");
+
+  titulo.textContent = dataEscolhida.toLocaleDateString("pt-BR", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
+
+  grade.style.display = "block";
+
+  grade.innerHTML = `
+    <div class="visualizacao-dia">
+      ${
+        eventosDoDia.length === 0
+          ? `<p>Nenhum evento neste dia.</p>`
+          : eventosDoDia.map(evento => `
+              <div class="evento">
+                <div class="horario">
+                  ${evento.hora.slice(0, 5)}
+                </div>
+
+                <div class="detalhes-evento">
+                  <h3>${evento.nome}</h3>
+                  <p>${evento.pessoa} · ${evento.local}</p>
+
+                  ${
+                    evento.transporte
+                      ? `<p>${evento.transporte}</p>`
+                      : ""
+                  }
+
+                  ${
+                    evento.observacao
+                      ? `<p>Obs.: ${evento.observacao}</p>`
+                      : ""
+                  }
+                </div>
+              </div>
+            `).join("")
+      }
+    </div>
+  `;
+}

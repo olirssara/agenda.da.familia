@@ -10,13 +10,6 @@ body {
   min-height: 100vh;
 }
 
-.agenda {
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 50px 24px;
-  min-height: 100vh;
-}
-
 
 /* CABEÇALHO */
 
@@ -210,7 +203,22 @@ h1 {
   display: none;
 }
 
-/* TELA INICIAL */
+.agenda {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100vh;
+  overflow-y: auto;
+  background: #f7f4ec;
+  box-sizing: border-box;
+  padding: 50px 24px;
+}
+
+.agenda > * {
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 .tela-inicial {
   min-height: 100vh;
@@ -250,4 +258,551 @@ h1 {
 
 .botao-abrir:hover {
   background-color: #53613f;
+}
+
+.botao-voltar {
+  display: block;
+  margin-bottom: 30px;
+  border: none;
+  background: transparent;
+  color: #596747;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.botao-voltar:hover {
+  text-decoration: underline;
+}
+
+.formulario {
+  max-width: 760px;
+  margin: 25px auto 0;
+  padding: 30px;
+  background: #fffdf8;
+  border: 1px solid #e3ddcf;
+  border-radius: 18px;
+  box-sizing: border-box;
+  box-shadow: 0 8px 25px rgba(80, 75, 60, 0.08);
+}
+
+.formulario h2 {
+  margin: 0 0 25px;
+  color: #596747;
+  font-size: 28px;
+  font-weight: normal;
+}
+
+.formulario label {
+  display: block;
+  margin-bottom: 18px;
+  color: #596747;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.formulario input,
+.formulario select,
+.formulario textarea {
+  display: block;
+  width: 100%;
+  margin-top: 7px;
+  padding: 12px 14px;
+  border: 1px solid #d8d2c3;
+  border-radius: 10px;
+  background: #fdfbf6;
+  color: #4f5147;
+  font-family: Arial, sans-serif;
+  font-size: 15px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.formulario input:focus,
+.formulario select:focus,
+.formulario textarea:focus {
+  border-color: #697653;
+}
+
+.formulario textarea {
+  resize: vertical;
+}
+
+#salvarEvento {
+  width: 100%;
+  margin-top: 5px;
+  padding: 14px;
+  border: none;
+  border-radius: 11px;
+  background: #697653;
+  color: #fff;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#salvarEvento:hover {
+  background: #53613f;
+}
+
+.botao-adicionar {
+  display: block;
+  width: 100%;
+  max-width: 760px;
+  margin: 25px auto;
+  padding: 16px;
+  border: 1px dashed #a9ad96;
+  border-radius: 14px;
+  background: transparent;
+  color: #596747;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.botao-adicionar:hover {
+  background: #eeeadd;
+  border-color: #697653;
+}
+
+.agenda-dia {
+  max-width: 760px;
+  margin: 0 auto 25px;
+  padding: 25px;
+  background: #fffdf8;
+  border: 1px solid #e3ddcf;
+  border-radius: 18px;
+  box-sizing: border-box;
+}
+
+.titulo-dia {
+  margin-bottom: 20px;
+}
+
+.dia-semana {
+  color: #8a806d;
+  font-size: 12px;
+  letter-spacing: 2px;
+  font-weight: bold;
+}
+
+.titulo-dia h2 {
+  margin: 5px 0 0;
+  color: #596747;
+  font-size: 25px;
+  font-weight: normal;
+}
+
+.evento {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 16px 0;
+  border-top: 1px solid #eee9dd;
+}
+
+.horario {
+  min-width: 55px;
+  color: #697653;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.detalhes-evento h3 {
+  margin: 0 0 5px;
+  color: #4f5147;
+  font-size: 17px;
+}
+
+.detalhes-evento p {
+  margin: 0;
+  color: #827b6c;
+  font-size: 14px;
+}
+
+.calendario {
+  width: 100%;
+  margin: 0 auto 25px;
+  background: #fffdf8;
+  border: 1px solid #e3ddcf;
+  border-radius: 18px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.calendario-cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  border-bottom: 1px solid #e3ddcf;
+}
+
+.calendario-cabecalho h2 {
+  margin: 0;
+  color: #596747;
+  font-size: 24px;
+  font-weight: normal;
+}
+
+.calendario-cabecalho button {
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #596747;
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.calendario-cabecalho button:hover {
+  background: #eeeadd;
+}
+
+.dias-semana,
+.grade-calendario {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.dias-semana {
+  border-bottom: 1px solid #e3ddcf;
+}
+
+.dias-semana span {
+  padding: 12px 5px;
+  text-align: center;
+  color: #8a806d;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.grade-calendario {
+  background: #e3ddcf;
+  gap: 1px;
+}
+
+.grade-calendario > div {
+  background: #fffdf8;
+  min-height: 105px;
+}
+
+.grade-calendario button.dia-calendario {
+  min-height: 105px;
+  padding: 8px;
+  border: none;
+  border-radius: 0;
+  background: #fffdf8;
+  color: #596747;
+  text-align: left;
+  vertical-align: top;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.grade-calendario button.dia-calendario:hover {
+  background: #f5f2e9;
+}
+
+.numero-dia {
+  display: block;
+  width: 27px;
+  height: 27px;
+  line-height: 27px;
+  margin-bottom: 4px;
+  text-align: center;
+  border-radius: 50%;
+  font-size: 14px;
+}
+
+.eventos-calendario {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.evento-mini {
+  padding: 4px 6px;
+  border-radius: 5px;
+  background: #e7eadc;
+  color: #596747;
+  font-size: 11px;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#mesAtual {
+  border: none;
+  background: transparent;
+  color: #596747;
+  font-family: inherit;
+  font-size: 24px;
+  font-weight: normal;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 10px;
+}
+
+#mesAtual:hover {
+  background: #eeeadd;
+}
+
+.seletor-mes {
+  display: none;
+  position: absolute;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  width: 280px;
+  padding: 18px;
+  background: #fffdf8;
+  border: 1px solid #e3ddcf;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(80, 75, 60, 0.15);
+}
+
+.seletor-mes.aberto {
+  display: block;
+}
+
+.seletor-mes select {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 11px 12px;
+  border: 1px solid #d8d2c3;
+  border-radius: 9px;
+  background: #fdfbf6;
+  color: #596747;
+  font-family: Arial, sans-serif;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+.seletor-mes button {
+  width: 100%;
+  padding: 11px;
+  border: none;
+  border-radius: 9px;
+  background: #697653;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.seletor-mes button:hover {
+  background: #53613f;
+}
+
+.controle-visualizacao {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#mesAtual {
+  width: auto !important;
+  margin: 0;
+}
+
+#tipoVisualizacao {
+  width: auto;
+  padding: 7px 10px;
+  border: 1px solid #e3ddcf;
+  border-radius: 8px;
+  background: #fffdf8;
+  color: #596747;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.controle-visualizacao {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.menu-visualizacao {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 6px;
+  width: 130px;
+  padding: 6px;
+  background: #fffdf8;
+  border: 1px solid #e3ddcf;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(80, 75, 60, 0.12);
+  z-index: 20;
+}
+
+.menu-visualizacao button {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: #596747;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.menu-visualizacao button:hover {
+  background: #eeeadd;
+}
+
+.visualizacao-dia {
+  padding: 25px;
+}
+
+.visualizacao-dia > p {
+  text-align: center;
+  margin: 40px 0;
+  color: #8a806d;
+}
+
+.botao-adicionar {
+  position: fixed;
+  top: 25px;
+  right: 25px;
+  z-index: 100;
+
+  width: auto;
+  max-width: none;
+  margin: 0;
+
+  padding: 14px 22px;
+  border: none;
+  border-radius: 10px;
+
+  background-color: #697653;
+  color: #f8f5ec;
+
+  box-shadow: 0 5px 15px rgba(80, 75, 60, 0.15);
+}
+
+/* BOTÃO ADICIONAR - VERSÃO FINAL */
+.agenda .botao-adicionar {
+  position: fixed;
+  top: 25px;
+  right: 25px;
+  z-index: 100;
+
+  width: auto;
+  max-width: none;
+  margin: 0;
+
+  padding: 12px 18px;
+  border: none;
+  border-radius: 10px;
+
+  background: #697653;
+  color: #f8f5ec;
+
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+
+  box-shadow: 0 5px 15px rgba(80, 75, 60, 0.15);
+}
+
+.agenda .botao-adicionar:hover {
+  background: #596747;
+}
+
+@media (max-width: 600px) {
+  .agenda .botao-adicionar {
+    top: 15px;
+    right: 15px;
+    padding: 9px 12px;
+    font-size: 12px;
+    border-radius: 8px;
+  }
+}
+
+/* PESSOAS - FAIXA HORIZONTAL */
+.pessoas {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  gap: 16px;
+  padding: 5px 5px 12px;
+  justify-content: flex-start;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.pessoas::-webkit-scrollbar {
+  display: none;
+}
+
+.pessoa {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+}
+
+/* CALENDÁRIO - CELULAR */
+@media (max-width: 600px) {
+  .calendario {
+    overflow-x: auto;
+  }
+
+  .calendario-cabecalho {
+    min-width: 650px;
+  }
+
+  .dias-semana,
+  .grade-calendario {
+    min-width: 650px;
+  }
+
+  .agenda {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  .cabecalho {
+    margin-top: 10px;
+  }
+
+  .cabecalho .pequeno {
+    font-size: 9px;
+    margin-bottom: 4px;
+  }
+
+  .cabecalho h1 {
+    font-size: 24px;
+    margin: 0;
+  }
+
+  .cabecalho .subtitulo {
+    font-size: 12px;
+    margin-top: 5px;
+  }
+}
+
+@media (max-width: 600px) {
+  .agenda .botao-adicionar {
+    top: auto;
+    right: 15px;
+    bottom: 15px;
+
+    padding: 9px 13px;
+    font-size: 12px;
+    border-radius: 8px;
+  }
 }
