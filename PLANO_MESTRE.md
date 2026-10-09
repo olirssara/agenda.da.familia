@@ -90,3 +90,13 @@ Documento de referência contendo todas as diretrizes, status atual e roadmap de
 3. **Evitar duplicações**: Não criar IDs ou variáveis duplicadas no JS.
 4. **Preservar o que funciona**: Não alterar trechos estáveis sem necessidade.
 5. **Commits pontuais**: Manter versões seguras para rollback.
+
+---
+
+## 14. Melhorias e Ajustes Recentes (Feedback da Família)
+- [x] **Padronização dos quadros e truncamento de texto longo (Pai & Davi)**: Nomes de eventos na semana agora limitam-se a 2 linhas com reticências (`...`) para nunca quebrar o layout nem esticar quadros vizinhos. Altura mínima e rolagem interna uniforme nos dias. Texto completo exibido no popover.
+- [x] **Ergonomia no celular - Menu e Botão + no rodapé (Pai)**: Botões flutuantes móveis posicionados no canto inferior direito (`☰` Menu da Família e `+` Adicionar), onde o polegar alcança com conforto. Ocultação do botão do topo no celular para liberar espaço e não cortar o título do mês.
+- [x] **Formulário de cadastro no celular (Sara)**: Modais centralizados e suaves, evitando empurrões bruscos na tela ou ocultação no rodapé.
+- [x] **Clique em evento no mês (Sara)**: Clicar no evento abre exclusivamente a janela flutuante (popover), sem mudar para a visualização do dia.
+- [x] **Correção no salvamento de fotos**: Compressão automática via Canvas para avatares leves (~10KB JPEG), eliminando erro de quota de memória.
+- [x] **Lembrete de Domingo**: Banner dinâmico inteligente no domingo e segunda-feira com envio de 1 toque no WhatsApp e botão para agendar alarme semanal nativo no celular (Google Agenda / Apple Calendar).
