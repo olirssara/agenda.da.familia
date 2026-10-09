@@ -2217,12 +2217,14 @@ h1 {
   border: 1px solid #e3ddcf;
   border-radius: 14px;
   padding: 12px;
-  min-height: 220px;
+  min-height: 260px;
+  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 8px;
   box-shadow: 0 2px 6px rgba(80, 75, 60, 0.04);
   transition: all 0.15s ease;
+  box-sizing: border-box;
 }
 
 .dia-semana-coluna:hover {
@@ -2276,6 +2278,11 @@ h1 {
   flex-direction: column;
   gap: 6px;
   flex: 1;
+  overflow-y: auto;
+  max-height: 480px;
+  padding-right: 2px;
+  scrollbar-width: thin;
+  scrollbar-color: #ded8cb transparent;
 }
 
 .dia-semana-vazio {
@@ -2294,6 +2301,15 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  max-height: 86px;
+  overflow: hidden;
+  box-sizing: border-box;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.evento-semana-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(60, 65, 45, 0.12);
 }
 
 .evento-semana-hora {
@@ -2305,6 +2321,13 @@ h1 {
   font-size: 13px;
   color: #434e38;
   word-break: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.32;
+  max-height: 36px;
 }
 
 .evento-semana-participantes {
@@ -4624,4 +4647,195 @@ h1 {
   font-size: 13px;
   color: #7d7564;
   margin-bottom: 18px;
+}
+
+/* ============================================================
+   BANNER DE LEMBRETE DE DOMINGO / INÍCIO DE SEMANA
+   ============================================================ */
+.banner-lembrete-domingo {
+  background: linear-gradient(135deg, #fffdf6 0%, #f7f3e6 100%);
+  border: 1.5px solid #dcd4be;
+  border-left: 5px solid #697653;
+  border-radius: 14px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  box-shadow: 0 3px 10px rgba(60, 65, 45, 0.06);
+  animation: surgirModal 0.25s ease;
+}
+
+.banner-lembrete-texto {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.banner-lembrete-icone {
+  font-size: 26px;
+}
+
+.banner-lembrete-texto strong {
+  display: block;
+  font-size: 15px;
+  color: #4b573d;
+  margin-bottom: 2px;
+}
+
+.banner-lembrete-texto p {
+  margin: 0;
+  font-size: 13px;
+  color: #776e5d;
+}
+
+.banner-lembrete-botoes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.btn-banner-zap {
+  background: #25d366;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: 0.15s;
+}
+
+.btn-banner-zap:hover {
+  background: #20ba59;
+}
+
+.btn-banner-agendar {
+  background: #697653;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.15s;
+}
+
+.btn-banner-agendar:hover {
+  background: #576243;
+}
+
+.btn-banner-fechar {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  color: #8b8372;
+  cursor: pointer;
+  padding: 4px;
+}
+
+/* ============================================================
+   AÇÕES FLUTUANTES NO CELULAR (MENU ☰ E ADICIONAR + NO POLEGAR)
+   ============================================================ */
+.acoes-flutuantes-mobile {
+  display: none;
+}
+
+@media (max-width: 860px) {
+  .acoes-flutuantes-mobile {
+    position: fixed;
+    right: 18px;
+    bottom: 20px;
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    z-index: 120;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .btn-flutuante-menu-mobile {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #fffdf8;
+    color: #596747;
+    border: 1.5px solid #ded8cb;
+    box-shadow: 0 4px 14px rgba(45, 50, 35, 0.16);
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+
+  .btn-flutuante-menu-mobile:active {
+    transform: scale(0.92);
+    background: #f4eee1;
+  }
+
+  .agenda .botao-adicionar-mobile {
+    position: static !important;
+    width: 52px !important;
+    height: 52px !important;
+    border-radius: 50% !important;
+    background-color: #697653 !important;
+    color: #f8f5ec !important;
+    font-size: 28px !important;
+    box-shadow: 0 6px 18px rgba(50, 60, 40, 0.28) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: none !important;
+    cursor: pointer;
+  }
+
+  .agenda .botao-adicionar-mobile:active {
+    transform: scale(0.92);
+  }
+
+  /* No celular, o botão ☰ superior fica oculto pois já está no rodapé ao alcance do polegar */
+  .topbar-esquerda #toggleSidebar {
+    display: none !important;
+  }
+
+  .titulo-mes-topbar {
+    max-width: none !important;
+    font-size: 14.5px !important;
+  }
+
+  /* Modal no celular fica centralizado e fácil de usar */
+  .modal-overlay {
+    padding: 14px !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .modal-conteudo {
+    max-width: 440px !important;
+    width: 100% !important;
+    max-height: 86dvh !important;
+    border-radius: 20px !important;
+    padding: 20px 16px !important;
+    margin: auto !important;
+    box-shadow: 0 10px 35px rgba(30, 35, 20, 0.3) !important;
+  }
+
+  .banner-lembrete-domingo {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .banner-lembrete-botoes {
+    width: 100%;
+    justify-content: space-between;
+  }
 }

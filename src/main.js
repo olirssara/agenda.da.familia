@@ -67,7 +67,48 @@ function garantirCoresUnicasEMigrar() {
 garantirCoresUnicasEMigrar();
 
 function salvarPessoas() {
-  localStorage.setItem("pessoas_familia", JSON.stringify(pessoasFamilia));
+  try {
+    localStorage.setItem("pessoas_familia", JSON.stringify(pessoasFamilia));
+  } catch (err) {
+    console.warn("Aviso ao salvar pessoas no storage:", err);
+  }
+}
+
+// Redimensiona e comprime qualquer foto de câmera para um avatar leve (~10KB JPEG) evitando estouro de quota
+function comprimirImagemParaAvatar(file, callback) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    const img = new Image();
+    img.onload = function() {
+      const maxDim = 160;
+      let w = img.width;
+      let h = img.height;
+      if (w > h) {
+        if (w > maxDim) {
+          h = Math.round((h * maxDim) / w);
+          w = maxDim;
+        }
+      } else {
+        if (h > maxDim) {
+          w = Math.round((w * maxDim) / h);
+          h = maxDim;
+        }
+      }
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, w, h);
+      const dataUrl = canvas.toDataURL("image/jpeg", 0.78);
+      callback(dataUrl);
+    };
+    img.onerror = function() {
+      callback(evt.target.result);
+    };
+    img.src = evt.target.result;
+  };
+  reader.readAsDataURL(file);
 }
 
 function obterPessoaPorNome(nome) {
@@ -407,6 +448,8 @@ function alternarSidebarMobile() {
   }
 }
 
+const btnMenuMobile = document.querySelector("#btnMenuMobile");
+
 if (toggleSidebar && sidebarAgenda) {
   toggleSidebar.addEventListener("click", function(e) {
     e.stopPropagation();
@@ -415,6 +458,13 @@ if (toggleSidebar && sidebarAgenda) {
     } else {
       sidebarAgenda.classList.toggle("recolhida");
     }
+  });
+}
+
+if (btnMenuMobile && sidebarAgenda) {
+  btnMenuMobile.addEventListener("click", function(e) {
+    e.stopPropagation();
+    alternarSidebarMobile();
   });
 }
 
@@ -427,7 +477,9 @@ document.addEventListener("click", function(e) {
     sidebarAgenda &&
     sidebarAgenda.classList.contains("aberta-mobile") &&
     !sidebarAgenda.contains(e.target) &&
-    e.target !== toggleSidebar
+    e.target !== toggleSidebar &&
+    e.target !== btnMenuMobile &&
+    !e.target.closest("#btnMenuMobile")
   ) {
     fecharSidebarMobile();
   }
@@ -878,9 +930,15 @@ function abrirModalNovoEvento(dataPredefinida = null) {
   renderizarSeletorPessoasEvento();
 
   modalNovoEvento.classList.remove("escondido");
-  setTimeout(() => {
-    if (nomeEvento) nomeEvento.focus();
-  }, 140);
+  const modalConteudo = modalNovoEvento.querySelector(".modal-conteudo");
+  if (modalConteudo) modalConteudo.scrollTop = 0;
+
+  // No celular, não força focus() para não subir o teclado cortando o modal
+  if (window.innerWidth > 768) {
+    setTimeout(() => {
+      if (nomeEvento) nomeEvento.focus();
+    }, 140);
+  }
 }
 
 function fecharModalNovoEventoFn() {
@@ -1129,9 +1187,14 @@ function abrirModalEditarEvento(id) {
   renderizarSeletorPessoasEdicao();
 
   modalEditarEvento.classList.remove("escondido");
-  setTimeout(() => {
-    if (editNomeEvento) editNomeEvento.focus();
-  }, 150);
+  const modalConteudoEdit = modalEditarEvento.querySelector(".modal-conteudo");
+  if (modalConteudoEdit) modalConteudoEdit.scrollTop = 0;
+
+  if (window.innerWidth > 768) {
+    setTimeout(() => {
+      if (editNomeEvento) editNomeEvento.focus();
+    }, 150);
+  }
 }
 
 function fecharModalEditarEvento() {
@@ -1649,6 +1712,64 @@ if (btnCompartilharAgendaSemana) {
   btnCompartilharAgendaSemana.addEventListener("click", function() {
     enviarAgendaSemanaWhatsApp();
   });
+}
+
+// ============================================================
+// LEMBRETE DE DOMINGO / INÍCIO DE SEMANA & AGENDAMENTO NO CELULAR
+// ============================================================
+const bannerLembreteDomingo = document.querySelector("#bannerLembreteDomingo");
+const btnZapDomingo = document.querySelector("#btnZapDomingo");
+const btnAgendarDomingo = document.querySelector("#btnAgendarDomingo");
+const btnFecharBannerDomingo = document.querySelector("#btnFecharBannerDomingo");
+
+function verificarLembreteDomingo() {
+  if (!bannerLembreteDomingo) return;
+  const hoje = new Date();
+  const diaSemana = hoje.getDay(); // 0 = Domingo, 1 = Segunda
+  const dispensado = sessionStorage.getItem("dispensar_banner_domingo");
+
+  if ((diaSemana === 0 || diaSemana === 1) && !dispensado) {
+    bannerLembreteDomingo.classList.remove("escondido");
+  } else {
+    bannerLembreteDomingo.classList.add("escondido");
+  }
+}
+
+if (btnZapDomingo) {
+  btnZapDomingo.addEventListener("click", function() {
+    enviarAgendaSemanaWhatsApp();
+  });
+}
+
+if (btnAgendarDomingo) {
+  btnAgendarDomingo.addEventListener("click", function() {
+    adicionarLembreteCalendarioCelular();
+  });
+}
+
+if (btnFecharBannerDomingo) {
+  btnFecharBannerDomingo.addEventListener("click", function() {
+    if (bannerLembreteDomingo) bannerLembreteDomingo.classList.add("escondido");
+    sessionStorage.setItem("dispensar_banner_domingo", "true");
+  });
+}
+
+function adicionarLembreteCalendarioCelular() {
+  const titulo = encodeURIComponent("☀️ Compartilhar Agenda da Família no WhatsApp");
+  const detalhes = encodeURIComponent("Hora de enviar o resumo dos compromissos da família no grupo do WhatsApp! Acesse: " + window.location.href);
+  const agora = new Date();
+  const diasAteDomingo = (7 - agora.getDay()) % 7;
+  const proxDomingo = new Date(agora);
+  proxDomingo.setDate(agora.getDate() + diasAteDomingo);
+  const ano = proxDomingo.getFullYear();
+  const mes = String(proxDomingo.getMonth() + 1).padStart(2, '0');
+  const dia = String(proxDomingo.getDate()).padStart(2, '0');
+  const dIni = `${ano}${mes}${dia}T090000`;
+  const dFim = `${ano}${mes}${dia}T091500`;
+
+  const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${titulo}&details=${detalhes}&dates=${dIni}/${dFim}&recur=RRULE:FREQ=WEEKLY;BYDAY=SU`;
+  window.open(url, "_blank");
+  exibirToast("Abrindo calendário para salvar o alarme de todo domingo! 🔔");
 }
 
 // Banner flutuante de atualização
@@ -2253,12 +2374,10 @@ if (editInputFotoPessoa) {
   editInputFotoPessoa.addEventListener("change", function(e) {
     const file = e.target.files && e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(evt) {
-      editFotoBase64 = evt.target.result;
+    comprimirImagemParaAvatar(file, function(base64Leve) {
+      editFotoBase64 = base64Leve;
       atualizarPreviewAvatarEdicao();
-    };
-    reader.readAsDataURL(file);
+    });
   });
 }
 
@@ -2447,12 +2566,10 @@ if (inputFotoPessoa) {
   inputFotoPessoa.addEventListener("change", function(e) {
     const file = e.target.files && e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(evt) {
-      fotoBase64Modal = evt.target.result;
+    comprimirImagemParaAvatar(file, function(base64Leve) {
+      fotoBase64Modal = base64Leve;
       atualizarPreviewAvatarModal();
-    };
-    reader.readAsDataURL(file);
+    });
   });
 }
 
@@ -2561,6 +2678,7 @@ function atualizarVisualizacao() {
 
   atualizarBadgeHoje();
   renderizarMiniCalendario();
+  verificarLembreteDomingo();
 }
 
 // 1. VISUALIZAÇÃO: MÊS (CLIQUE NO DIA VAI PARA A PÁGINA DO DIA!)
@@ -2627,8 +2745,12 @@ function mostrarVisualizacaoMes() {
       </div>
     `;
 
-    // Clicar no dia no calendário mensal vai DIRETAMENTE para a página do dia!
-    quadrado.addEventListener("click", function() {
+    // Clicar no dia no calendário mensal vai para o dia, A MENOS que tenha clicado em um evento!
+    quadrado.addEventListener("click", function(e) {
+      if (e.target.closest(".evento-mini") || e.target.closest(".evento-dot-mini")) {
+        // Clicou no evento: NÃO abre o dia, deixa apenas o popover flutuante abrir!
+        return;
+      }
       dataReferencia = new Date(ano, mes, dia);
       visualizacaoAtual = "dia";
       atualizarVisualizacao();

@@ -176,6 +176,23 @@
 
       <!-- ÁREA PRINCIPAL DO CALENDÁRIO -->
       <section class="calendario-principal-area">
+
+        <!-- BANNER DE LEMBRETE DE DOMINGO / INÍCIO DE SEMANA -->
+        <div id="bannerLembreteDomingo" class="banner-lembrete-domingo escondido">
+          <div class="banner-lembrete-texto">
+            <span class="banner-lembrete-icone">☀️</span>
+            <div>
+              <strong>Resumo da Semana da Família</strong>
+              <p>Domingo de organizar! Envie o resumo para o grupo ou agende o lembrete no celular.</p>
+            </div>
+          </div>
+          <div class="banner-lembrete-botoes">
+            <button type="button" id="btnZapDomingo" class="btn-banner-zap">📲 Enviar no WhatsApp</button>
+            <button type="button" id="btnAgendarDomingo" class="btn-banner-agendar" title="Adicionar lembrete no celular">🔔 Lembrete no Celular</button>
+            <button type="button" id="btnFecharBannerDomingo" class="btn-banner-fechar" aria-label="Fechar">✕</button>
+          </div>
+        </div>
+
         <div class="calendario" id="calendario">
           <div class="dias-semana">
              <span>DOM</span>
@@ -192,10 +209,15 @@
 
     </div>
 
-    <!-- BOTÃO FLUTUANTE '+' PARA TELAS MOBILE -->
-    <button id="botaoAdicionar" class="botao-adicionar botao-adicionar-mobile" aria-label="Adicionar">
-      +
-    </button>
+    <!-- BOTÕES FLUTUANTES ERGONÔMICOS PARA CELULAR (MENU ☰ E ADICIONAR + NO ALCANCE DO POLEGAR) -->
+    <div class="acoes-flutuantes-mobile">
+      <button id="btnMenuMobile" class="btn-flutuante-menu-mobile" type="button" aria-label="Menu da Família" title="Menu da Família">
+        ☰
+      </button>
+      <button id="botaoAdicionar" class="botao-adicionar botao-adicionar-mobile" aria-label="Adicionar" title="Adicionar">
+        +
+      </button>
+    </div>
 
     <!-- ACTION SHEET: MENU ADICIONAR PARA TELAS MOBILE -->
     <div id="actionSheetAdicionarMobile" class="action-sheet-mobile escondido" role="dialog" aria-modal="true">
