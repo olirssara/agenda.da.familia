@@ -30,30 +30,29 @@
 
   <main class="agenda escondido">
 
-    <button id="voltarInicio" class="botao-voltar">← Voltar</button>
+    <!-- BARRA SUPERIOR ESTILO GOOGLE CALENDAR -->
+    <header class="app-topbar">
+      <div class="topbar-esquerda">
+        <button id="toggleSidebar" class="btn-topbar-icone" title="Menu principal da família" aria-label="Menu principal">☰</button>
+        <div class="topbar-logo">
+          <div class="logo-calendario-badge" id="logoDiaHoje">8</div>
+          <div class="logo-textos">
+            <span class="logo-titulo">Agenda</span>
+            <span class="logo-subtitulo">da Família</span>
+          </div>
+        </div>
+        <button id="btnIrParaHoje" class="btn-hoje-topbar" title="Ir para a data de hoje">Hoje</button>
+        <div class="topbar-nav-mes">
+          <button id="mesAnterior" class="btn-nav-seta" title="Anterior">‹</button>
+          <button id="mesProximo" class="btn-nav-seta" title="Próximo">›</button>
+          <h2 id="mesAtual" class="titulo-mes-topbar">Outubro de 2026</h2>
+        </div>
+      </div>
 
-    <header class="cabecalho">
-      <p class="pequeno">NOSSA CASA</p>
-
-      <h1>Agenda da Família</h1>
-
-      <p class="subtitulo">Outubro · 2026</p>
-    </header>
-
-    <button id="abrirFamilia" class="botao-familia">
-      ...
-    </button>
-
-    <section class="calendario" id="calendario">
-
-      <div class="calendario-cabecalho">
-        <button id="mesAnterior">‹</button>
-    
+      <div class="topbar-direita">
         <div class="controle-visualizacao">
-          <button id="mesAtual">Outubro 2026</button>
-        
-          <button id="tipoVisualizacao">
-            Mês ▾
+          <button id="tipoVisualizacao" class="btn-tipo-view">
+            <span>Mês ▾</span>
           </button>
           <div id="menuVisualizacao" class="menu-visualizacao escondido">
             <button data-view="dia">Dia</button>
@@ -62,157 +61,863 @@
             <button data-view="ano">Ano</button>
           </div>
         </div>
-    
-        <button id="mesProximo">›</button>
+        <button id="voltarInicio" class="botao-voltar-topbar" title="Voltar para a tela inicial">
+          <span class="texto-voltar-longo">← Início</span>
+          <span class="texto-voltar-curto">←</span>
+        </button>
       </div>
-    
-      <div class="dias-semana">
-         <span>DOM</span>
-         <span>SEG</span>
-         <span>TER</span>
-         <span>QUA</span>
-         <span>QUI</span>
-         <span>SEX</span>
-         <span>SÁB</span>
-      </div>
-    
-      <div class="grade-calendario" id="gradeCalendario"></div>
-    
-    </section>
+    </header>
 
+    <!-- CORPO PRINCIPAL COM SIDEBAR LATERAL E CALENDÁRIO -->
+    <div class="agenda-layout-corpo">
 
-    <button id="botaoAdicionar" class="botao-adicionar" aria-label="Adicionar">
+      <!-- BACKDROP PARA FECHAR SIDEBAR NO CELULAR -->
+      <div id="sidebarBackdrop" class="sidebar-backdrop escondido"></div>
+
+      <!-- SIDEBAR LATERAL UNIFICADA (GOOGLE CALENDAR + NOSSA FAMÍLIA) -->
+      <aside class="sidebar-agenda" id="sidebarAgenda">
+
+        <!-- BOTÃO '+ CRIAR ▾' COM MENU FIXADO DIRETAMENTE ABAIXO DELE -->
+        <div class="sidebar-criar-container">
+          <button id="botaoCriarSidebar" class="botao-criar-pill" type="button" aria-expanded="false">
+            <span class="icone-plus-colorido">+</span>
+            <span class="texto-criar">Criar</span>
+            <span class="seta-criar">▾</span>
+          </button>
+
+          <!-- MENU ADICIONAR ANEXADO DIRETAMENTE AO BOTÃO CRIAR (NUNCA VAI PARA BAIXO) -->
+          <div id="menuAdicionar" class="menu-adicionar menu-adicionar-sidebar escondido">
+            <button data-acao="evento">
+              📅 Evento
+            </button>
+            <button data-acao="compra">
+              🛒 Compra
+            </button>
+            <button data-acao="cardapio">
+              🍽️ Cardápio
+            </button>
+            <button data-acao="pessoa">
+              👤 Pessoa
+            </button>
+          </div>
+        </div>
+
+        <!-- MINI CALENDÁRIO DO MÊS -->
+        <div class="sidebar-mini-calendario" id="sidebarMiniCalendario">
+          <div class="mini-cal-cabecalho">
+            <span id="miniMesTitulo" class="mini-mes-titulo">Outubro de 2026</span>
+            <div class="mini-cal-botoes">
+              <button id="miniMesAnterior" class="btn-mini-nav" title="Mês anterior">‹</button>
+              <button id="miniMesProximo" class="btn-mini-nav" title="Próximo mês">›</button>
+            </div>
+          </div>
+          <div class="mini-cal-dias-semana">
+            <span>D</span>
+            <span>S</span>
+            <span>T</span>
+            <span>Q</span>
+            <span>Q</span>
+            <span>S</span>
+            <span>S</span>
+          </div>
+          <div class="mini-cal-grade" id="miniGradeCalendario"></div>
+        </div>
+
+        <!-- PESSOAS DA FAMÍLIA (LISTA COM FILTRO MÚLTIPLO E PERFIS) -->
+        <div class="sidebar-secao-pessoas">
+          <div class="sidebar-pessoas-topo">
+            <span class="sidebar-secao-titulo">Pessoas da família</span>
+            <button id="btnAdicionarPessoaSidebar" class="btn-mini-add-pessoa" title="Adicionar nova pessoa">+</button>
+          </div>
+          <div class="sidebar-filtro-controles">
+            <button id="btnFiltroTodos" class="btn-filtro-tag ativo" type="button">✓ Ver Todos</button>
+            <span class="sidebar-filtro-dica">Clique na pessoa para filtrar ou ver perfil</span>
+          </div>
+          <div id="sidebarListaPessoas" class="sidebar-lista-pessoas"></div>
+        </div>
+
+        <!-- CARDÁPIO DA CASA INTEGRADO -->
+        <div class="sidebar-bloco-integrado">
+          <div class="sidebar-pessoas-topo">
+            <span class="sidebar-secao-titulo">🍽️ Cardápio de Hoje</span>
+          </div>
+          <p id="resumoPratoHoje" class="sidebar-card-prato">Carregando...</p>
+          <button id="btnAtalhoCardapio" class="sidebar-link-acao" type="button">
+            Ver cardápio completo da semana →
+          </button>
+        </div>
+
+        <!-- COMPRA RÁPIDA INTEGRADA -->
+        <div class="sidebar-bloco-integrado">
+          <div class="sidebar-pessoas-topo">
+            <span class="sidebar-secao-titulo">🛒 Lista de Compras</span>
+          </div>
+          <form id="formCompraRapida" class="form-compra-rapida-sidebar">
+            <input id="inputCompraRapida" type="text" placeholder="Anotar item rápido..." required autocomplete="off" />
+            <button type="submit" title="Adicionar">+</button>
+          </form>
+          <button id="btnAtalhoCompras" class="sidebar-link-acao" type="button">
+            Abrir lista de compras completa →
+          </button>
+        </div>
+
+        <!-- COMPARTILHAMENTO DA AGENDA DA SEMANA NO WHATSAPP -->
+        <div class="sidebar-bloco-integrado bloco-whats-semana">
+          <button type="button" id="btnCompartilharAgendaSemana" class="btn-whats-semana-sidebar" title="Compartilhar resumo da semana no grupo da família">
+            <span class="icone-zap">📲</span>
+            <div class="texto-btn-zap">
+              <strong>Agenda da Semana no Whats</strong>
+              <span>Enviar resumo para a família</span>
+            </div>
+          </button>
+        </div>
+
+      </aside>
+
+      <!-- ÁREA PRINCIPAL DO CALENDÁRIO -->
+      <section class="calendario-principal-area">
+        <div class="calendario" id="calendario">
+          <div class="dias-semana">
+             <span>DOM</span>
+             <span>SEG</span>
+             <span>TER</span>
+             <span>QUA</span>
+             <span>QUI</span>
+             <span>SEX</span>
+             <span>SÁB</span>
+          </div>
+          <div class="grade-calendario" id="gradeCalendario"></div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- BOTÃO FLUTUANTE '+' PARA TELAS MOBILE -->
+    <button id="botaoAdicionar" class="botao-adicionar botao-adicionar-mobile" aria-label="Adicionar">
       +
     </button>
 
-      <div id="menuAdicionar" class="menu-adicionar escondido">
-
-         <button data-acao="evento">
-           📅 Evento
-         </button>
-    
-         <button data-acao="compra">
-           🛒 Compra
-         </button>
-    
-         <button data-acao="cardapio">
-           🍽️ Cardápio
-         </button>
-    
-         <button data-acao="pessoa">
-           👤 Pessoa
-         </button>
-    
+    <!-- ACTION SHEET: MENU ADICIONAR PARA TELAS MOBILE -->
+    <div id="actionSheetAdicionarMobile" class="action-sheet-mobile escondido" role="dialog" aria-modal="true">
+      <div class="action-sheet-backdrop" id="backdropActionSheetMobile"></div>
+      <div class="action-sheet-conteudo">
+        <div class="action-sheet-alca"></div>
+        <div class="action-sheet-cabecalho">
+          <span class="action-sheet-titulo">O que deseja criar?</span>
+          <button type="button" class="action-sheet-fechar" id="fecharActionSheetMobile" aria-label="Fechar">✕</button>
+        </div>
+        <div class="action-sheet-opcoes">
+          <button type="button" class="action-sheet-item" data-acao="evento">
+            <span class="action-sheet-icone" style="background:#eef4ec; color:#5a7a52;">📅</span>
+            <div class="action-sheet-textos">
+              <strong>Novo Evento</strong>
+              <span>Compromisso, médico ou atividade familiar</span>
+            </div>
+          </button>
+          <button type="button" class="action-sheet-item" data-acao="compra">
+            <span class="action-sheet-icone" style="background:#fef8ed; color:#c48937;">🛒</span>
+            <div class="action-sheet-textos">
+              <strong>Item de Compra</strong>
+              <span>Anotar na lista de compras da família</span>
+            </div>
+          </button>
+          <button type="button" class="action-sheet-item" data-acao="cardapio">
+            <span class="action-sheet-icone" style="background:#fbf3f6; color:#9c5b73;">🍽️</span>
+            <div class="action-sheet-textos">
+              <strong>Cardápio da Semana</strong>
+              <span>Planejar refeição de um dia da semana</span>
+            </div>
+          </button>
+          <button type="button" class="action-sheet-item" data-acao="pessoa">
+            <span class="action-sheet-icone" style="background:#eef4f9; color:#4b749f;">👤</span>
+            <div class="action-sheet-textos">
+              <strong>Nova Pessoa</strong>
+              <span>Cadastrar membro da família</span>
+            </div>
+          </button>
+        </div>
       </div>
-
-
-    <div id="formulario" class="formulario escondido">
-
-      <h2>Novo evento</h2>
-
-      <label>
-        Nome do evento
-        <input id="nomeEvento" type="text" placeholder="Ex: Dentista">
-      </label>
-
-      <label>
-        Quem vai?
-        <select id="pessoaEvento">
-           <option value="Diogo">Diogo</option>
-           <option value="Iara">Iara</option>
-           <option value="Davi">Davi</option>
-           <option value="Sofia">Sofia</option>
-           <option value="Sara">Sara</option>
-           <option value="Benjamim">Benjamim</option>
-           <option value="Todos">Todos</option>
-        </select>
-      </label>
-
-      <label>
-        Data
-        <input id="dataEvento" type="date">
-      </label>
-
-      <label>
-        Horário
-        <input id="horaEvento" type="time">
-      </label>
-
-      <label>
-        Local
-        <input id="localEvento" type="text" placeholder="Ex: Clínica X">
-      </label>
-
-      <label>
-        Transporte
-      
-        <select id="transporteEvento">
-           <option value="carro">🚗 Precisa de carro</option>
-           <option value="carona">🚙 Vai de carona</option>
-           <option value="casa">🏠 Em casa</option>
-           <option value="a-pe">🚶 Vai a pé</option>
-           <option value="publico">🚌 Transporte público</option>
-           <option value="indefinido">❓ Ainda não definido</option>
-        </select>
-      </label>
-
-      <label>
-      Observação
-    
-      <textarea
-        id="observacaoEvento"
-        placeholder="Ex: Levar documento"
-        rows="3"
-      ></textarea>
-    </label>
-
-      <button id="salvarEvento">
-        Adicionar evento
-      </button>
+    </div>
 
   </main>
 
-  <section id="telaFamilia" class="tela-familia escondido">
-
-    <button id="voltarAgenda" class="botao-voltar-agenda">
-      ← Voltar para agenda
-    </button>
-  
-    <h2>Nossa Família</h2>
-  
-    <div class="opcoes-familia">
-  
-      <button id="abrirPessoas" class="opcao-familia">
-         <span>👨‍👩‍👧‍👦</span>
-         <strong>Pessoas</strong>
-      </button>
-  
-      <button class="opcao-familia">
-         <span>🛒</span>
-         <strong>Lista de compras</strong>
-      </button>
-  
-      <button class="opcao-familia">
-         <span>🍽️</span>
-         <strong>Cardápio</strong>
-      </button>
-  
-    </div>
-
-    <div id="areaPessoas" class="area-pessoas escondido">
-
-      <h3>Pessoas da família</h3>
-    
-      <button id="adicionarPessoa" class="botao-adicionar-pessoa">
-        + Adicionar pessoa
-      </button>
-    
-      <div id="listaPessoas" class="lista-pessoas">
+  <!-- MODAL: NOVO EVENTO (ESTILIZADO E ORGANIZADO, IDÊNTICO AO MODAL DE EDIÇÃO) -->
+  <div id="modalNovoEvento" class="modal-overlay escondido" role="dialog" aria-modal="true">
+    <div class="modal-conteudo modal-evento-form">
+      <div class="modal-topo">
+        <h3>📅 Novo Evento</h3>
+        <button id="fecharModalNovoEvento" class="modal-fechar" type="button" aria-label="Fechar">✕</button>
       </div>
-    
+
+      <div id="formulario" class="modal-form-conteudo">
+        <label class="modal-label">
+          Nome do evento
+          <input id="nomeEvento" type="text" placeholder="Ex: Dentista, Almoço de domingo..." required autocomplete="off">
+        </label>
+
+        <div class="campo-selecao-pessoas">
+          <label class="rotulo-selecao">
+            Quem vai? <span class="dica-selecao">(Selecione uma ou mais pessoas)</span>
+          </label>
+          <div id="seletorPessoasEvento" class="chips-pessoas-container"></div>
+          <div class="acoes-selecao-pessoas">
+            <button type="button" id="btnSelecionarTodosEvento" class="btn-atalho-pessoas">Todos</button>
+            <button type="button" id="btnLimparPessoasEvento" class="btn-atalho-pessoas">Limpar</button>
+          </div>
+          <input type="hidden" id="pessoaEvento" value="" />
+        </div>
+
+        <div class="grid-duas-colunas">
+          <label class="modal-label">
+            Data
+            <input id="dataEvento" type="date" required>
+          </label>
+
+          <label class="modal-label">
+            Horário
+            <input id="horaEvento" type="time" required>
+          </label>
+        </div>
+
+        <label class="modal-label">
+          Local
+          <input id="localEvento" type="text" placeholder="Ex: Clínica X, Casa da Vovó...">
+        </label>
+
+        <label class="modal-label">
+          Transporte
+          <select id="transporteEvento">
+             <option value="carro">🚗 Precisa de carro</option>
+             <option value="carona">🚙 Vai de carona</option>
+             <option value="casa">🏠 Em casa</option>
+             <option value="a-pe">🚶 Vai a pé</option>
+             <option value="publico">🚌 Transporte público</option>
+             <option value="indefinido">❓ Ainda não definido</option>
+          </select>
+        </label>
+
+        <label class="modal-label">
+          🔔 Alarme e Lembrete
+          <select id="alarmeEvento">
+            <option value="none">🔕 Sem lembrete</option>
+            <option value="0">⏰ Na hora do evento</option>
+            <option value="10">⏰ 10 minutos antes</option>
+            <option value="20" selected>⏰ 20 minutos antes</option>
+            <option value="30">⏰ 30 minutos antes</option>
+            <option value="60">⏰ 1 hora antes</option>
+            <option value="120">⏰ 2 horas antes</option>
+            <option value="1440">⏰ 1 dia antes (24h antes)</option>
+            <option value="2880">⏰ 2 dias antes (48h antes)</option>
+            <option value="10080">⏰ 1 semana antes</option>
+          </select>
+        </label>
+
+        <label class="modal-label">
+          Observação
+          <textarea
+            id="observacaoEvento"
+            placeholder="Ex: Levar documento, levar receita..."
+            rows="3"
+          ></textarea>
+        </label>
+
+        <!-- RECORRÊNCIA DO EVENTO (NOVO EVENTO) -->
+        <div class="campo-recorrencia-box">
+          <label class="checkbox-recorrencia-linha">
+            <input type="checkbox" id="eventoRecorrente" />
+            <span class="checkbox-recorrencia-texto">🔄 Repetir este evento (recorrente)</span>
+          </label>
+          <div id="containerRecorrencia" class="container-recorrencia-opcoes escondido">
+            <div class="grid-duas-colunas">
+              <label class="modal-label">
+                Frequência
+                <select id="recorrenciaTipo">
+                  <option value="diario">📅 Diário / A cada X dias</option>
+                  <option value="semanal">🗓️ Semanal (mesmo dia da semana)</option>
+                  <option value="mensal">📆 Mensal (mesmo dia do mês)</option>
+                  <option value="anual">🎂 Anual (mesma data do ano)</option>
+                </select>
+              </label>
+
+              <label class="modal-label">
+                Repetir a cada
+                <div class="input-intervalo-container">
+                  <input type="number" id="recorrenciaIntervalo" min="1" max="365" value="1" />
+                  <span id="recorrenciaSufixo" class="sufixo-intervalo">dias (ex: 15 = quinzenal, 2 = de 2 em 2 dias)</span>
+                </div>
+              </label>
+            </div>
+
+            <label class="modal-label">
+              Repetir até a data (opcional)
+              <input type="date" id="recorrenciaFim" />
+            </label>
+          </div>
+        </div>
+
+        <div class="modal-botoes modal-botoes-novo">
+          <button type="button" id="cancelarModalNovoEvento" class="botao-cancelar-modal">Cancelar</button>
+          <button id="salvarEvento" type="button" class="botao-confirmar-modal">Adicionar evento</button>
+        </div>
+      </div>
     </div>
-  
-  </section>
+  </div>
+
+  <!-- MODAL: PERFIL DA PESSOA (VISUALIZAÇÃO DE INFORMAÇÕES + WHATSAPP + ANIVERSÁRIO) -->
+  <div id="modalPerfilPessoa" class="modal-overlay escondido" role="dialog" aria-modal="true">
+    <div class="modal-conteudo modal-perfil-card">
+      <div class="modal-topo">
+        <h3>👤 Perfil na Família</h3>
+        <button id="fecharModalPerfil" class="modal-fechar" type="button" aria-label="Fechar">✕</button>
+      </div>
+
+      <div class="perfil-card-corpo">
+        <div class="perfil-avatar-destaque">
+          <div id="perfilAvatarFoto" class="perfil-avatar-circulo">S</div>
+          <span id="perfilNomePessoa" class="perfil-nome-titulo">Sara</span>
+          <span id="perfilCorBadge" class="perfil-cor-pill" style="background:#c48937;">Cor exclusiva</span>
+        </div>
+
+        <div class="perfil-informacoes-grade">
+          <div class="perfil-info-item">
+            <span class="perfil-info-rotulo">🎂 Aniversário & Idade</span>
+            <span id="perfilDataNascimento" class="perfil-info-valor">Não informado</span>
+            <span id="perfilIdadeCalculada" class="perfil-info-destaque"></span>
+          </div>
+
+          <div class="perfil-info-item">
+            <span class="perfil-info-rotulo">💬 WhatsApp</span>
+            <span id="perfilWhatsapp" class="perfil-info-valor">Não informado</span>
+            <a id="btnLinkWhatsapp" href="#" target="_blank" rel="noopener noreferrer" class="btn-zap-link escondido">
+              <span>💬</span> Conversar no WhatsApp
+            </a>
+          </div>
+
+          <div class="perfil-info-item">
+            <span class="perfil-info-rotulo">✉️ E-mail</span>
+            <span id="perfilEmail" class="perfil-info-valor">Não informado</span>
+          </div>
+        </div>
+
+        <div class="perfil-identificacao-box">
+          <div class="perfil-identificacao-linha">
+            <label for="selectQuemSouEu">Quem é você na família?</label>
+            <select id="selectQuemSouEu" class="select-quem-sou-eu"></select>
+          </div>
+          <p id="avisoPermissaoEdicao" class="aviso-permissao">
+            ℹ️ Todos podem visualizar as informações de contato e aniversários, mas apenas você pode editar o seu próprio perfil.
+          </p>
+        </div>
+
+        <div class="modal-botoes modal-botoes-perfil">
+          <button type="button" id="btnExcluirPessoaPerfil" class="botao-perigo-modal-suave" title="Remover da família">
+            🗑️ Remover pessoa
+          </button>
+          <button type="button" id="btnEditarPerfilPessoa" class="botao-confirmar-modal">
+            ✏️ Editar Perfil
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: EDITAR DADOS DA PESSOA -->
+  <div id="modalEditarPessoa" class="modal-overlay escondido" role="dialog" aria-modal="true">
+    <div class="modal-conteudo">
+      <div class="modal-topo">
+        <h3>✏️ Editar Informações</h3>
+        <button id="fecharModalEditarPessoa" class="modal-fechar" type="button" aria-label="Fechar">✕</button>
+      </div>
+
+      <form id="formEditarPessoa" class="modal-form">
+        <input type="hidden" id="editPessoaId" value="" />
+
+        <div class="avatar-preview-bloco">
+          <div id="editAvatarPreview" class="avatar-preview-grande" style="background-color: #5a7a52;">
+            <span id="editAvatarPreviewLetra">?</span>
+            <img id="editAvatarPreviewImg" class="avatar-preview-foto escondido" alt="Foto" />
+          </div>
+          <div class="avatar-preview-acoes">
+            <label class="botao-upload-foto">
+              📷 Trocar foto
+              <input type="file" id="editInputFotoPessoa" accept="image/*" class="escondido" />
+            </label>
+            <button type="button" id="editRemoverFotoPessoa" class="botao-remover-foto escondido">Remover foto</button>
+          </div>
+        </div>
+
+        <label class="modal-label">
+          Nome da pessoa
+          <input type="text" id="editInputNomePessoa" required autocomplete="off" />
+        </label>
+
+        <div class="grid-duas-colunas">
+          <label class="modal-label">
+            WhatsApp / Zap
+            <input type="tel" id="editInputWhatsappPessoa" placeholder="(DD) 99999-9999" />
+          </label>
+
+          <label class="modal-label">
+            Data de Nascimento
+            <input type="date" id="editInputNascimentoPessoa" />
+          </label>
+        </div>
+
+        <label class="modal-label">
+          E-mail
+          <input type="email" id="editInputEmailPessoa" placeholder="exemplo@email.com" />
+        </label>
+
+        <div class="modal-label">
+          Cor exclusiva (não pode se repetir)
+          <div class="paleta-cores-grade" id="editPaletaCoresPessoa"></div>
+          <div class="cor-custom-linha">
+            <span>Ou escolha outra cor:</span>
+            <input type="color" id="editInputCorPessoa" value="#5a7a52" />
+          </div>
+          <span id="editAvisoCorDuplicada" class="aviso-cor-erro escondido"></span>
+        </div>
+
+        <div class="modal-botoes">
+          <button type="button" id="cancelarModalEditarPessoa" class="botao-cancelar-modal">Cancelar</button>
+          <button type="submit" class="botao-confirmar-modal">Salvar Informações</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TELA DEDICADA: LISTA DE COMPRAS COMPLETA -->
+  <main id="telaCompras" class="tela-pagina escondido">
+
+    <div class="barra-superior">
+      <button id="voltarComprasParaAgenda" class="botao-voltar">← Voltar para a Agenda</button>
+      <button id="limparComprasConcluidas" class="botao-limpar" title="Limpar itens marcados">Limpar concluídos</button>
+    </div>
+
+    <header class="cabecalho">
+      <p class="pequeno">NOSSA CASA</p>
+      <h1>Lista de Compras 🛒</h1>
+      <p class="subtitulo" id="contadorCompras">0 itens na lista</p>
+    </header>
+
+    <form id="formTelaCompras" class="form-adicionar-grande">
+      <input id="inputTelaCompras" type="text" placeholder="O que precisamos comprar? (ex: Café, Pão, Queijo...)" required autocomplete="off" />
+      <button type="submit" class="botao-adicionar-grande">+ Adicionar</button>
+    </form>
+
+    <div id="listaComprasCompleta" class="lista-compras-completa"></div>
+
+  </main>
+
+  <!-- TELA DEDICADA: CARDÁPIO COMPLETO -->
+  <main id="telaCardapio" class="tela-pagina escondido">
+
+    <div class="barra-superior">
+      <button id="voltarCardapioParaAgenda" class="botao-voltar">← Voltar para a Agenda</button>
+    </div>
+
+    <header class="cabecalho">
+      <p class="pequeno">NOSSA CASA</p>
+      <h1>Cardápio da Família 🍽️</h1>
+      <p class="subtitulo">Planejamento das refeições da semana</p>
+    </header>
+
+    <div id="gradeSemanalCardapio" class="grade-semanal-cardapio"></div>
+
+  </main>
+
+  <!-- MODAL: NOVA PESSOA -->
+  <div id="modalNovaPessoa" class="modal-overlay escondido" role="dialog" aria-modal="true">
+    <div class="modal-conteudo">
+      <div class="modal-topo">
+        <h3>Adicionar Pessoa à Família</h3>
+        <button id="fecharModalPessoa" class="modal-fechar" type="button" aria-label="Fechar">✕</button>
+      </div>
+
+      <form id="formNovaPessoa" class="modal-form">
+        <div class="avatar-preview-bloco">
+          <div id="avatarPreview" class="avatar-preview-grande" style="background-color: #5a7a52;">
+            <span id="avatarPreviewLetra">?</span>
+            <img id="avatarPreviewImg" class="avatar-preview-foto escondido" alt="Foto" />
+          </div>
+          <div class="avatar-preview-acoes">
+            <label class="botao-upload-foto">
+              📷 Escolher foto
+              <input type="file" id="inputFotoPessoa" accept="image/*" class="escondido" />
+            </label>
+            <button type="button" id="removerFotoPessoa" class="botao-remover-foto escondido">Remover foto</button>
+          </div>
+        </div>
+
+        <label class="modal-label">
+          Nome da pessoa
+          <input type="text" id="inputNomePessoa" placeholder="Ex: Lucas, Vovó Maria..." required autocomplete="off" />
+        </label>
+
+        <div class="grid-duas-colunas">
+          <label class="modal-label">
+            WhatsApp / Zap
+            <input type="tel" id="inputWhatsappPessoa" placeholder="(DD) 99999-9999" />
+          </label>
+
+          <label class="modal-label">
+            Data de Nascimento
+            <input type="date" id="inputNascimentoPessoa" />
+          </label>
+        </div>
+
+        <label class="modal-label">
+          E-mail
+          <input type="email" id="inputEmailPessoa" placeholder="exemplo@email.com" />
+        </label>
+
+        <div class="modal-label">
+          Cor exclusiva (cada pessoa deve ter uma cor única)
+          <div class="paleta-cores-grade" id="paletaCoresPessoa"></div>
+          <div class="cor-custom-linha">
+            <span>Ou escolha outra cor:</span>
+            <input type="color" id="inputCorPessoa" value="#5a7a52" />
+          </div>
+          <span id="avisoCorDuplicada" class="aviso-cor-erro escondido"></span>
+        </div>
+
+        <div class="modal-botoes">
+          <button type="button" id="cancelarModalPessoa" class="botao-cancelar-modal">Cancelar</button>
+          <button type="submit" class="botao-confirmar-modal">Salvar Pessoa</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: AVISO DE EVENTO DUPLICADO / SIMILAR -->
+  <div id="modalAvisoDuplicado" class="modal-overlay escondido" role="dialog" aria-modal="true">
+    <div class="modal-conteudo modal-aviso">
+      <div class="modal-topo">
+        <h3>⚠️ Evento já existe neste dia?</h3>
+        <button id="fecharModalDuplicado" class="modal-fechar" type="button" aria-label="Fechar">✕</button>
+      </div>
+
+      <p class="aviso-mensagem">
+        Encontramos um evento parecido já agendado para esta mesma data:
+      </p>
+
+      <div id="cardEventoExistente" class="card-evento-existente"></div>
+
+      <p class="aviso-pergunta">
+        Deseja adicionar mesmo assim ou prefere revisar?
+      </p>
+
+      <div class="modal-botoes">
+        <button type="button" id="revisarEventoDuplicado" class="botao-cancelar-modal">Revisar dados</button>
+        <button type="button" id="confirmarEventoDuplicado" class="botao-confirmar-modal">Sim, adicionar mesmo assim</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: EDITAR EVENTO -->
+  <div id="modalEditarEvento" class="modal-overlay escondido" role="dialog" aria-modal="true">
+    <div class="modal-conteudo modal-evento-form">
+      <div class="modal-topo">
+        <h3>✏️ Editar Evento</h3>
+        <button id="fecharModalEditarEvento" class="modal-fechar" type="button" aria-label="Fechar">✕</button>
+      </div>
+
+      <form id="formEditarEvento" class="modal-form">
+        <input type="hidden" id="editEventoId" value="" />
+
+        <label class="modal-label">
+          Nome do evento
+          <input id="editNomeEvento" type="text" placeholder="Ex: Dentista" required autocomplete="off" />
+        </label>
+
+        <div class="campo-selecao-pessoas">
+          <label class="rotulo-selecao">
+            Quem vai? <span class="dica-selecao">(Selecione uma ou mais pessoas)</span>
+          </label>
+          <div id="editSeletorPessoasEvento" class="chips-pessoas-container"></div>
+          <div class="acoes-selecao-pessoas">
+            <button type="button" id="editBtnSelecionarTodos" class="btn-atalho-pessoas">Todos</button>
+            <button type="button" id="editBtnLimparPessoas" class="btn-atalho-pessoas">Limpar</button>
+          </div>
+          <input type="hidden" id="editPessoaEvento" value="" />
+        </div>
+
+        <div class="grid-duas-colunas">
+          <label class="modal-label">
+            Data
+            <input id="editDataEvento" type="date" required />
+          </label>
+
+          <label class="modal-label">
+            Horário
+            <input id="editHoraEvento" type="time" required />
+          </label>
+        </div>
+
+        <label class="modal-label">
+          Local
+          <input id="editLocalEvento" type="text" placeholder="Ex: Clínica X" />
+        </label>
+
+        <label class="modal-label">
+          Transporte
+          <select id="editTransporteEvento">
+            <option value="carro">🚗 Precisa de carro</option>
+            <option value="carona">🚙 Vai de carona</option>
+            <option value="casa">🏠 Em casa</option>
+            <option value="a-pe">🚶 Vai a pé</option>
+            <option value="publico">🚌 Transporte público</option>
+            <option value="indefinido">❓ Ainda não definido</option>
+          </select>
+        </label>
+
+        <label class="modal-label">
+          🔔 Alarme e Lembrete
+          <select id="editAlarmeEvento">
+            <option value="none">🔕 Sem lembrete</option>
+            <option value="0">⏰ Na hora do evento</option>
+            <option value="10">⏰ 10 minutos antes</option>
+            <option value="20">⏰ 20 minutos antes</option>
+            <option value="30">⏰ 30 minutos antes</option>
+            <option value="60">⏰ 1 hora antes</option>
+            <option value="120">⏰ 2 horas antes</option>
+            <option value="1440">⏰ 1 dia antes (24h antes)</option>
+            <option value="2880">⏰ 2 dias antes (48h antes)</option>
+            <option value="10080">⏰ 1 semana antes</option>
+          </select>
+        </label>
+
+        <label class="modal-label">
+          Observação
+          <textarea id="editObservacaoEvento" placeholder="Ex: Levar documento" rows="3"></textarea>
+        </label>
+
+        <!-- RECORRÊNCIA DO EVENTO (EDIÇÃO) -->
+        <div class="campo-recorrencia-box">
+          <label class="checkbox-recorrencia-linha">
+            <input type="checkbox" id="editEventoRecorrente" />
+            <span class="checkbox-recorrencia-texto">🔄 Repetir este evento (recorrente)</span>
+          </label>
+          <div id="editContainerRecorrencia" class="container-recorrencia-opcoes escondido">
+            <div class="grid-duas-colunas">
+              <label class="modal-label">
+                Frequência
+                <select id="editRecorrenciaTipo">
+                  <option value="diario">📅 Diário / A cada X dias</option>
+                  <option value="semanal">🗓️ Semanal (mesmo dia da semana)</option>
+                  <option value="mensal">📆 Mensal (mesmo dia do mês)</option>
+                  <option value="anual">🎂 Anual (mesma data do ano)</option>
+                </select>
+              </label>
+
+              <label class="modal-label">
+                Repetir a cada
+                <div class="input-intervalo-container">
+                  <input type="number" id="editRecorrenciaIntervalo" min="1" max="365" value="1" />
+                  <span id="editRecorrenciaSufixo" class="sufixo-intervalo">dias (ex: 15 = quinzenal, 2 = de 2 em 2 dias)</span>
+                </div>
+              </label>
+            </div>
+
+            <label class="modal-label">
+              Repetir até a data (opcional)
+              <input type="date" id="editRecorrenciaFim" />
+            </label>
+          </div>
+        </div>
+
+        <div class="modal-botoes modal-botoes-edicao">
+          <button type="button" id="btnExcluirDoModalEdicao" class="botao-perigo-modal" title="Excluir este evento">
+            🗑️ Excluir
+          </button>
+          <div class="modal-botoes-direita">
+            <button type="button" id="cancelarModalEditarEvento" class="botao-cancelar-modal">Cancelar</button>
+            <button type="submit" id="salvarEdicaoEvento" class="botao-confirmar-modal">Salvar alterações</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: CONFIRMAR EXCLUSÃO DE EVENTO -->
+  <div id="modalConfirmarExclusao" class="modal-overlay escondido" role="dialog" aria-modal="true">
+    <div class="modal-conteudo modal-aviso">
+      <div class="modal-topo">
+        <h3>🗑️ Excluir evento?</h3>
+        <button id="fecharModalExclusao" class="modal-fechar" type="button" aria-label="Fechar">✕</button>
+      </div>
+
+      <p class="aviso-mensagem" id="mensagemConfirmarExclusao">
+        Tem certeza que deseja excluir este evento? Esta ação não pode ser desfeita.
+      </p>
+
+      <div id="cardEventoParaExcluir" class="card-evento-existente"></div>
+
+      <div class="modal-botoes">
+        <button type="button" id="cancelarExclusaoEvento" class="botao-cancelar-modal">Não, manter</button>
+        <button type="button" id="confirmarExclusaoEvento" class="botao-perigo-modal">Sim, excluir</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- POPOVER / MODAL FLUTUANTE DE DETALHES DO EVENTO (ESTILO GOOGLE CALENDAR) -->
+  <div id="popoverDetalheEvento" class="modal-overlay modal-overlay-popover escondido" role="dialog" aria-modal="true">
+    <div class="popover-evento-card">
+      <div class="popover-acoes-topo">
+        <div class="popover-acoes-grupo">
+          <button type="button" id="popoverBtnEditar" class="popover-btn-acao" title="Editar compromisso">✏️</button>
+          <button type="button" id="popoverBtnExcluir" class="popover-btn-acao" title="Excluir compromisso">🗑️</button>
+          <button type="button" id="popoverBtnCompartilhar" class="popover-btn-acao" title="Enviar no WhatsApp">💬</button>
+        </div>
+        <button type="button" id="popoverBtnFechar" class="popover-btn-fechar" title="Fechar visualização" aria-label="Fechar">✕</button>
+      </div>
+
+      <div class="popover-corpo">
+        <div class="popover-titulo-linha">
+          <span id="popoverCorIndicador" class="popover-cor-quadrado"></span>
+          <div class="popover-titulos">
+            <h2 id="popoverNomeEvento" class="popover-titulo">Nome do Evento</h2>
+            <p id="popoverDataHora" class="popover-subtitulo">Terça-feira, 13 de outubro às 14:00</p>
+          </div>
+        </div>
+
+        <div class="popover-botoes-atalho">
+          <button type="button" id="popoverBtnWhatsRapido" class="popover-btn-pill">
+            <span class="icone-pill">💬</span> Enviar no WhatsApp
+          </button>
+          <button type="button" id="popoverBtnCopiarLink" class="popover-btn-pill">
+            <span class="icone-pill">🔗</span> Copiar link
+          </button>
+        </div>
+
+        <div class="popover-detalhes-lista">
+          <div class="popover-item" id="popoverLinhaAlarme">
+            <span class="popover-item-icone">🔔</span>
+            <div class="popover-item-conteudo">
+              <span id="popoverAlarmeTexto" class="popover-item-valor">20 minutos antes</span>
+            </div>
+          </div>
+
+          <div class="popover-item" id="popoverLinhaParticipantes">
+            <span class="popover-item-icone">👤</span>
+            <div class="popover-item-conteudo">
+              <div id="popoverParticipantesBadges" class="popover-badges-grid"></div>
+            </div>
+          </div>
+
+          <div class="popover-item" id="popoverLinhaLocal">
+            <span class="popover-item-icone">📍</span>
+            <div class="popover-item-conteudo">
+              <span id="popoverLocalTexto" class="popover-item-valor"></span>
+            </div>
+          </div>
+
+          <div class="popover-item" id="popoverLinhaTransporte">
+            <span class="popover-item-icone">🚗</span>
+            <div class="popover-item-conteudo">
+              <span id="popoverTransporteTexto" class="popover-item-valor"></span>
+            </div>
+          </div>
+
+          <div class="popover-item" id="popoverLinhaObs">
+            <span class="popover-item-icone">📝</span>
+            <div class="popover-item-conteudo">
+              <span id="popoverObsTexto" class="popover-item-valor"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: BOAS-VINDAS / ONBOARDING (PRIMEIRO ACESSO) -->
+  <div id="modalBoasVindas" class="modal-overlay escondido" role="dialog" aria-modal="true">
+    <div class="modal-conteudo modal-onboarding-card">
+      <div class="onboarding-topo">
+        <span class="onboarding-emoji">🏡</span>
+        <h2>Bem-vindo(a) à Agenda da Família!</h2>
+        <p>Para deixar tudo sincronizado com seus compromissos, aniversários e lembretes, selecione seu perfil ou cadastre-se:</p>
+      </div>
+
+      <div class="onboarding-escolha-tabs">
+        <button type="button" id="tabJaSouMembro" class="btn-tab-onboarding ativo">Já sou da família</button>
+        <button type="button" id="tabNovoMembro" class="btn-tab-onboarding">Cadastrar meu perfil</button>
+      </div>
+
+      <!-- OPÇÃO 1: SELECIONAR MEMBRO EXISTENTE -->
+      <div id="blocoSelecionarMembro" class="onboarding-bloco">
+        <label class="modal-label">
+          Quem é você na lista?
+          <select id="selectMembroBoasVindas" class="select-onboarding"></select>
+        </label>
+        <button type="button" id="btnConfirmarMembroExistente" class="botao-confirmar-modal largura-total">
+          Entrar na Agenda da Família →
+        </button>
+      </div>
+
+      <!-- OPÇÃO 2: CADASTRAR NOVO MEMBRO -->
+      <form id="formNovoMembroBoasVindas" class="onboarding-bloco escondido">
+        <label class="modal-label">
+          Seu Nome Completo ou Apelido
+          <input type="text" id="boasVindasNome" placeholder="Ex: Diogo, Vovó Maria..." required autocomplete="off" />
+        </label>
+        <div class="grid-duas-colunas">
+          <label class="modal-label">
+            WhatsApp / Zap
+            <input type="tel" id="boasVindasWhatsapp" placeholder="(11) 99999-9999" required />
+          </label>
+          <label class="modal-label">
+            Data de Nascimento (para seu aniversário automático 🎂)
+            <input type="date" id="boasVindasNascimento" required />
+          </label>
+        </div>
+        <label class="modal-label">
+          E-mail
+          <input type="email" id="boasVindasEmail" placeholder="seuemail@exemplo.com" />
+        </label>
+        <div class="modal-label">
+          Escolha sua cor exclusiva:
+          <div class="paleta-cores-grade" id="paletaBoasVindas"></div>
+          <span id="avisoCorBoasVindas" class="aviso-cor-erro escondido"></span>
+        </div>
+        <button type="submit" class="botao-confirmar-modal largura-total">
+          Salvar meu perfil e começar ✨
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- BANNER FLUTUANTE DE ATUALIZAÇÃO DA AGENDA (REENVIAR NO WHATSAPP) -->
+  <div id="bannerAtualizacaoSemana" class="banner-atualizacao-whats escondido">
+    <div class="banner-whats-icone">📲</div>
+    <div class="banner-whats-texto">
+      <strong id="bannerWhatsTitulo">Agenda da semana atualizada!</strong>
+      <span id="bannerWhatsSub">Deseja enviar o resumo atualizado no grupo do WhatsApp?</span>
+    </div>
+    <div class="banner-whats-acoes">
+      <button type="button" id="btnEnviarWhatsBanner" class="btn-banner-whats-sim">Enviar no WhatsApp</button>
+      <button type="button" id="btnFecharWhatsBanner" class="btn-banner-whats-fechar" title="Fechar aviso">✕</button>
+    </div>
+  </div>
+
+  <!-- MODAL DE ALARME / LEMBRETE DISPARADO -->
+  <div id="modalAlarmeDisparado" class="modal-overlay escondido" role="dialog" aria-modal="true">
+    <div class="modal-conteudo modal-alarme-card">
+      <div class="alarme-sino-animado">🔔</div>
+      <span class="alarme-rotulo-topo">LEMBRETE DE COMPROMISSO</span>
+      <h2 id="alarmeNomeEventoModal" class="alarme-nome-evento">Nome do Evento</h2>
+      <p id="alarmeDataHoraModal" class="alarme-data-hora">Hoje às 14:00</p>
+      <div id="alarmeInfoExtraModal" class="alarme-info-extra"></div>
+      <div class="modal-botoes">
+        <button type="button" id="btnOkAlarme" class="botao-confirmar-modal largura-total">
+          Entendido 👍
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST DE NOTIFICAÇÃO -->
+  <div id="toastNotificacao" class="toast-notificacao" role="alert" aria-live="polite"></div>
 
   <script type="module" src="/src/main.js"></script>
 
